@@ -1,0 +1,33 @@
+/* BODY */
+.body{
+    font-family: "Space Grotesk", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Clase para la fuente */
+.space-grotesk {
+    font-family: "Space Grotesk", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+/* Colores Usados */
+:root{
+    --primary: #b9ff66;
+    --secondary: #303142;
+    --tertiary: #f3f3f3;
+}
+
+
+/* HEADER */
+.nav-color{
+    background-color: #b9ff66;
+}
+
+
+/* MAIN */
+
+
+/* FOOTER */
