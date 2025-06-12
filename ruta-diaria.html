@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="img/icono.png" rel="icon">
+
+    <title>Ruta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&amp;display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            color: #000;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: #f2fcf5;
+            width: 240px;
+            padding: 32px 24px 48px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar-top {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-title {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .nav-link {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            background-color: #dff6e7;
+        }
+
+        /* Sidebar bottom user */
+        .sidebar-bottom {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            color: #000;
+        }
+
+        .user-role {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 16px;
+            color: #7a7a7a;
+        }
+
+        /* Main content */
+        main {
+            flex-grow: 1;
+            padding: 32px 24px 48px 24px;
+            max-width: 900px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+            color: #000;
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb a {
+            color: #000;
+        }
+
+        .breadcrumb-sep {
+            margin: 0 8px;
+            color: #000;
+        }
+
+        /* Title */
+        h1 {
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 32px;
+            margin: 0 0 24px 0;
+        }
+
+        /* Vehicle card */
+        .vehicle-card {
+            background-color: #f2fcf5;
+            border-radius: 16px;
+            padding: 24px 24px 24px 24px;
+            max-width: 480px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .vehicle-circle {
+            width: 40px;
+            height: 40px;
+            background-color: #dff6e7;
+            border-radius: 50%;
+            position: absolute;
+            top: 24px;
+            left: 24px;
+        }
+
+        .vehicle-text {
+            margin-left: 56px;
+        }
+
+        .vehicle-label {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            margin-bottom: 4px;
+        }
+
+        .vehicle-plate {
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 24px;
+            margin: 0 0 8px 0;
+        }
+
+        .vehicle-route {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            color: #7a7a7a;
+            margin: 0;
+        }
+
+        /* Stops */
+        .stops-title {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 16px;
+        }
+
+        .stops-list {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stop-item {
+            display: flex;
+            flex-direction: column;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            border-right: 1px solid #ddd;
+            padding-right: 16px;
+            min-width: 100px;
+        }
+
+        .stop-item:last-child {
+            border-right: none;
+        }
+
+        .stop-name {
+            white-space: normal;
+        }
+
+        .stop-time {
+            margin-top: 4px;
+        }
+
+        /* Map */
+        .map-title {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            margin: 32px 0 16px 0;
+        }
+
+        .map-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 16px 16px 24px 16px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .sidebar-top {
+                flex-direction: row;
+                gap: 16px;
+                margin: 0;
+            }
+
+            .sidebar-title {
+                display: none;
+            }
+
+            .nav-links {
+                flex-direction: row;
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 12px;
+                border-radius: 6px;
+            }
+
+            .sidebar-bottom {
+                gap: 8px;
+            }
+
+            main {
+                padding: 24px 16px 32px 16px;
+                max-width: 100%;
+            }
+
+            .vehicle-card {
+                max-width: 100%;
+                padding: 16px 16px 16px 16px;
+            }
+
+            .vehicle-circle {
+                top: 16px;
+                left: 16px;
+                width: 32px;
+                height: 32px;
+            }
+
+            .vehicle-text {
+                margin-left: 48px;
+            }
+
+            .stops-list {
+                gap: 12px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .stop-item {
+                min-width: 120px;
+                border-right: 1px solid #ddd;
+                padding-right: 12px;
+                flex-shrink: 0;
+            }
+
+            .map-image {
+                max-width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <aside aria-label="Navegación principal" class="sidebar" role="complementary">
+            <div class="sidebar-top">
+                <div class="sidebar-title">
+                    <a href="dash-padre.html" style="text-decoration: none; color: #000;">Tracing</a>
+                </div>
+                <nav aria-label="Menú principal" class="nav-links">
+                    <a class="nav-link" href="gestion-vehiculos.html" tabindex="0">
+                        Vehículos
+                    </a>
+                    <a class="nav-link" href="historial-rutas.html" tabindex="0">
+                        Historial de Rutas
+                    </a>
+                    <a class="nav-link active" href="ruta-diaria.html" tabindex="0">
+                        Ruta de Hoy
+                    </a>
+                </nav>
+            </div>
+            <div class="sidebar-bottom">
+                <img alt="Foto de perfil de Juan Pérez" class="user-img" height="32"
+                    src="https://storage.googleapis.com/a1aa/image/2cc11eb0-0678-4fae-9f61-4c51ba21438b.jpg"
+                    width="32" />
+                <div class="user-info">
+                    <div class="user-name">
+                        Juan Pérez
+                    </div>
+                    <div class="user-role">
+                        Conductor
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <main role="main">
+            <nav aria-label="Ruta de navegación" class="breadcrumb">
+                <a href="#" tabindex="0">
+                    Inicio
+                </a>
+                <span aria-hidden="true" class="breadcrumb-sep">
+                    ›
+                </span>
+                <a href="#" tabindex="0">
+                    Rutas
+                </a>
+                <span aria-hidden="true" class="breadcrumb-sep">
+                    ›
+                </span>
+                <span aria-current="page">
+                    Ruta diaria
+                </span>
+            </nav>
+            <h1>
+                Mi ruta de hoy
+            </h1>
+            <section aria-label="Vehículo asignado" class="vehicle-card">
+                <div aria-hidden="true" class="vehicle-circle">
+                </div>
+                <div class="vehicle-text">
+                    <p class="vehicle-label">
+                        Vehículo asignado
+                    </p>
+                    <p class="vehicle-plate">
+                        Placa:
+                        <strong>
+                            ABC-123
+                        </strong>
+                    </p>
+                    <p class="vehicle-route">
+                        Ruta: Colegio Central - Barrio Norte
+                    </p>
+                </div>
+            </section>
+            <section aria-label="Paradas programadas">
+                <h2 class="stops-title">
+                    Paradas programadas
+                </h2>
+                <div class="stops-list">
+                    <div class="stop-item">
+                        <div class="stop-name">
+                            Colegio Central
+                        </div>
+                        <div class="stop-time">
+                            07:30
+                        </div>
+                    </div>
+                    <div class="stop-item">
+                        <div class="stop-name">
+                            Parque Norte
+                        </div>
+                        <div class="stop-time">
+                            07:45
+                        </div>
+                    </div>
+                    <div class="stop-item">
+                        <div class="stop-name">
+                            Calle 10
+                        </div>
+                        <div class="stop-time">
+                            08:00
+                        </div>
+                    </div>
+                    <div class="stop-item">
+                        <div class="stop-name">
+                            Barrio Norte
+                        </div>
+                        <div class="stop-time">
+                            08:15
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section aria-label="Recorrido en mapa">
+                <h2 class="map-title">
+                    Recorrido en mapa
+                </h2>
+                <div style="width: 100%">
+                    <iframe width="100%" height="600" frameborder="0" scrolling="no"
+                        marginheight="0" marginwidth="0"
+                        src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=es&amp;q=La%20Paz,%20Bolivia+(Mi%20nombre%20de%20egocios)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a
+                        href="https://www.gps.ie/car-satnav-gps/">Sat Navs</a>
+                    </iframe>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

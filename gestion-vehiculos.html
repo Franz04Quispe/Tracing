@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="img/icono.png" rel="icon">
+    <title>Vehiculos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&amp;display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            color: #000;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: #f0faf5;
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 32px 24px 32px 24px;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar h2 {
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 0 24px 0;
+        }
+
+        .sidebar a {
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 1.3;
+            padding: 8px 16px;
+            border-radius: 12px;
+            color: #000;
+            display: inline-block;
+        }
+
+        .sidebar a.active {
+            background-color: #d9f3e4;
+        }
+
+        .sidebar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #6b6b6b;
+        }
+
+        .sidebar .user-info .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .sidebar .user-info .user-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar .user-info .user-text strong {
+            font-weight: 700;
+            font-size: 14px;
+            color: #000;
+        }
+
+        /* Main content */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 48px 48px 48px;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: #000;
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breadcrumb span+span::before {
+            content: ">";
+            margin: 0 8px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 28px;
+            margin: 0 0 24px 0;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 32px;
+        }
+
+        .tab {
+            font-weight: 700;
+            font-size: 15px;
+            padding-bottom: 8px;
+            cursor: default;
+            color: #000;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #000;
+        }
+
+        .tab.inactive {
+            font-weight: 600;
+            color: #b0b0b0;
+        }
+
+        /* Vehicle list */
+        .vehicle-list-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .vehicle-list {
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .vehicle-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .vehicle-item:last-child {
+            border-bottom: none;
+        }
+
+        .vehicle-item>div {
+            min-width: 120px;
+            max-width: 25%;
+        }
+
+        /* Form assign route and driver */
+        .assign-form {
+            margin-top: 48px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .assign-form label {
+            font-weight: 700;
+            font-size: 15px;
+            min-width: 60px;
+        }
+
+        .assign-form .input-group {
+            flex: 1 1 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .assign-form input,
+        .assign-form select {
+            margin-top: 8px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: none;
+            background-color: #f9f9f9;
+            font-size: 14px;
+            font-weight: 400;
+            color: #000;
+            outline-offset: 2px;
+            outline-color: transparent;
+            outline-style: solid;
+            transition: outline-color 0.2s ease;
+        }
+
+        .assign-form input::placeholder,
+        .assign-form select option[disabled] {
+            color: #6b6b6b;
+        }
+
+        .assign-form input:focus,
+        .assign-form select:focus {
+            outline-color: #00c851;
+        }
+
+        .assign-form button {
+            background-color: #00c851;
+            border: none;
+            border-radius: 16px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 12px 24px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 16px 24px;
+                overflow-x: auto;
+            }
+
+            .sidebar nav {
+                flex-direction: row;
+                gap: 12px;
+                flex-wrap: nowrap;
+            }
+
+            .sidebar a {
+                padding: 8px 12px;
+                white-space: nowrap;
+                border-radius: 8px;
+                font-size: 14px;
+            }
+
+            .sidebar .user-info {
+                display: none;
+            }
+
+            .main-content {
+                padding: 24px 16px 32px 16px;
+            }
+
+            .assign-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .assign-form button {
+                width: 100%;
+                padding: 14px 0;
+                border-radius: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <aside aria-label="Menú principal" class="sidebar" role="navigation">
+            <nav>
+                <h2>
+                    <a href="dash-padre.html" style="text-decoration: none; color: #000;">Tracing</a>
+                </h2>
+                <a aria-current="page" class="active" href="#">
+                    Vehículos
+                </a>
+                <a href="historial-rutas.html">
+                    Historial de Rutas
+                </a>
+                <a href="ruta-diaria.html">
+                    Ruta de Hoy
+                </a>
+
+            </nav>
+            <div aria-label="Información del usuario administrador" class="user-info">
+                <img alt="Avatar de usuario administrador con fondo rojo y letra U blanca" class="avatar" height="32"
+                    src="https://storage.googleapis.com/a1aa/image/98a2c68a-ac10-4946-a524-7d51d0e0b6fd.jpg"
+                    width="32" />
+                <div class="user-text">
+                    <strong>
+                        Administrador
+                    </strong>
+                    <span>
+                        admin@colegio.com
+                    </span>
+                </div>
+            </div>
+        </aside>
+        <main class="main-content">
+            <nav aria-label="Breadcrumb" class="breadcrumb">
+                <span>
+                    Inicio
+                </span>
+                <span>
+                    Vehículos
+                </span>
+            </nav>
+            <h1>
+                Vehículos
+            </h1>
+            <div aria-label="Opciones de Vehículos" class="tabs" role="tablist">
+                <button aria-selected="true" class="tab active" role="tab" tabindex="0">
+                    Lista
+                </button>
+                <button aria-selected="false" class="tab inactive" disabled="" role="tab" tabindex="-1">
+                    Registrar
+                </button>
+                <button aria-selected="false" class="tab inactive" disabled="" role="tab" tabindex="-1">
+                    Conductores
+                </button>
+            </div>
+            <section aria-labelledby="listado-vehiculos-title">
+                <h2 class="vehicle-list-title" id="listado-vehiculos-title">
+                    Listado de vehículos
+                </h2>
+                <div class="vehicle-list" role="list">
+                    <div class="vehicle-item" role="listitem">
+                        <div>
+                            Placa: ABC123
+                        </div>
+                        <div>
+                            Capacidad: 20
+                        </div>
+                        <div>
+                            Conductor: Juan Pérez
+                        </div>
+                        <div>
+                            Estado: Activo
+                        </div>
+                    </div>
+                    <div class="vehicle-item" role="listitem">
+                        <div>
+                            Placa: XYZ789
+                        </div>
+                        <div>
+                            Capacidad: 15
+                        </div>
+                        <div>
+                            Conductor: María López
+                        </div>
+                        <div>
+                            Estado: En ruta
+                        </div>
+                    </div>
+                    <div class="vehicle-item" role="listitem">
+                        <div>
+                            Placa: DEF456
+                        </div>
+                        <div>
+                            Capacidad: 18
+                        </div>
+                        <div>
+                            Conductor: Sin asignar
+                        </div>
+                        <div>
+                            Estado: Inactivo
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <form aria-labelledby="asignar-ruta-title" class="assign-form" onsubmit="return false;">
+                <h2 id="asignar-ruta-title"
+                    style="width: 100%; margin-bottom: 16px; font-weight: 700; font-size: 18px;">
+                    Asignar ruta y conductor
+                </h2>
+                <div class="input-group">
+                    <label for="placa">
+                        Placa
+                    </label>
+                    <input autocomplete="off" id="placa" name="placa" placeholder="Ej: ABC123" type="text" />
+                </div>
+                <div class="input-group">
+                    <label for="ruta">
+                        Ruta
+                    </label>
+                    <select id="ruta" name="ruta">
+                        <option disabled="" selected="" value="">
+                            Selecciona ruta
+                        </option>
+                        <option value="ruta1">
+                            Ruta 1
+                        </option>
+                        <option value="ruta2">
+                            Ruta 2
+                        </option>
+                        <option value="ruta3">
+                            Ruta 3
+                        </option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="conductor">
+                        Conductor
+                    </label>
+                    <select id="conductor" name="conductor">
+                        <option disabled="" selected="" value="">
+                            Selecciona conductor
+                        </option>
+                        <option value="juan">
+                            Juan Pérez
+                        </option>
+                        <option value="maria">
+                            María López
+                        </option>
+                        <option value="sin-asignar">
+                            Sin asignar
+                        </option>
+                    </select>
+                </div>
+                <button aria-label="Asignar ruta y conductor" type="submit">
+                    Asignar
+                </button>
+            </form>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,11 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+
+    <!-- Favicon -->
+    <link href="img/icono.png" rel="icon">
+    <title>Iniciar sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            padding: 100px 20px;
+            /* POner backgroud */
+            background-image: url(img/gif-fondo.gif);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: rgba(255, 255, 255, 0.044);
+
+        }
+
+
+        main {
+            max-width: 500px;
+            width: 100%;
+            height: auto;
+            padding: 2rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            color: white;
+            background: rgba(138, 35, 35, 0.3);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            border: 1.5px solid rgba(209, 213, 219, 0.3);
+        }
+
+        a.logo {
+            text-align: end;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            text-align: center;
+        }
+
+        p.subtitle {
+            font-weight: 500;
+            font-size: 14px;
+            color: white;
+            text-align: center;
+            margin: 0 0 40px 0;
+            line-height: 1.4;
+        }
+
+        nav.tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 24px;
+        }
+
+        nav.tabs button {
+            all: unset;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 12px;
+            cursor: pointer;
+            color: #ffffff;
+            border-bottom: 2px solid transparent;
+            user-select: none;
+        }
+
+        nav.tabs button.active {
+            color: #ffffff;
+            border-bottom-color: #fefbfb;
+        }
+
+        section.info-box {
+            background-color: #f2fbf6;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        section.info-box h2 {
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 0 8px 0;
+            color: #00b050;
+        }
+
+        section.info-box p {
+            font-weight: 500;
+            font-size: 14px;
+            color: #6b6b6b;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: none;
+            background-color: #f9f9f9;
+            color: #000;
+            outline-offset: 2px;
+            outline-color: transparent;
+            outline-style: solid;
+            transition: outline-color 0.2s ease;
+        }
+
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder {
+            color: #000;
+            opacity: 0.6;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline-color: #00b050;
+        }
+
+        p.error-msg {
+            font-weight: 500;
+            font-size: 13px;
+            color: #ffffff;
+            margin: 12px 0 20px 0;
+        }
+
+        button.submit-btn {
+            background-color: #00b050;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 10px 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 480px) {
+            main {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    
+    <main>
+        <h1>Iniciar sesión</h1>
+        <p class="subtitle">Accede a tu cuenta con tu correo y contraseña</p>
+        <a href="index.html"><img src="img/icono.png" alt="icono" height="80" width="80"
+                style="display: block; margin: 0 auto;"></a>
+        <nav class="tabs" role="tablist" aria-label="Opciones de cuenta">
+            <button type="button" class="active" aria-selected="true" tabindex="-1">Iniciar sesión</button>
+            <a href="registro.html" style="text-decoration: none;"><button type="button" aria-selected="false" tabindex="0" style="color:#7a7a7a;">Registro</button></a>
+
+        </nav>
+        <section class="info-box" aria-label="Información de inicio de sesión">
+            <h2>Iniciar sesión</h2>
+            <p>Introduce tus credenciales para continuar</p>
+        </section>
+        <form>
+            <label for="email">Correo electrónico</label>
+            <input id="email" type="email" placeholder="ejemplo@correo.com" autocomplete="email" />
+            <label for="password" style="margin-top: 20px;">Contraseña</label>
+            <input id="password" type="password" placeholder="Ingresa tu contraseña" autocomplete="current-password" />
+            <p class="error-msg">Correo o contraseña incorrectos.</p>
+            <a href="dash-padre.html"><button type="button" class="submit-btn">Iniciar sesión</button></a>
+        </form>
+    </main>
 </body>
+
 </html>

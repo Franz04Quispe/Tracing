@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link href="img/icono.png" rel="icon">
+
+    <title>Historial de Rutas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --green: #00b74a;
+            --light-green-bg: #eaf7ef;
+            --lightest-green-bg: #f5fcf7;
+            --gray-text: #6b7280;
+            --border-color: #e5e7eb;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 14px;
+            color: #111827;
+            background: #fff;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--lightest-green-bg);
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 16px 24px 24px;
+        }
+
+        .sidebar nav {
+            flex-grow: 1;
+        }
+
+        .sidebar h3 {
+            font-weight: 600;
+            font-size: 14px;
+            margin: 0 0 12px 0;
+            color: #111827;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 400;
+            font-size: 14px;
+            color: #111827;
+        }
+
+        .sidebar ul li a.active,
+        .sidebar ul li a:hover {
+            background-color: var(--light-green-bg);
+        }
+
+        .sidebar .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--gray-text);
+        }
+
+        .sidebar .admin-info img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .sidebar .admin-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .sidebar .admin-text strong {
+            font-weight: 600;
+            font-size: 12px;
+            color: #111827;
+        }
+
+        /* Main content */
+        main {
+            flex-grow: 1;
+            padding: 24px 32px 48px 32px;
+            max-width: 100%;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 14px;
+            color: #111827;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .breadcrumb span {
+            color: #6b7280;
+        }
+
+        /* Title */
+        h2 {
+            font-weight: 600;
+            font-size: 18px;
+            margin: 0 0 16px 0;
+        }
+
+        /* Filter form */
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 180px;
+            min-width: 140px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .filter-group input {
+            border: none;
+            background-color: var(--light-green-bg);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-family: var(--font-family);
+            color: #111827;
+            outline-offset: 2px;
+        }
+
+        .filter-group input::placeholder {
+            color: #6b7280;
+        }
+
+        button.search-btn {
+            background-color: var(--green);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        button.search-btn:hover {
+            background-color: #00993f;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            font-weight: 600;
+            font-size: 14px;
+            padding-bottom: 8px;
+            cursor: pointer;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #111827;
+            border-color: #111827;
+        }
+
+        /* Visual route */
+        .visual-route {
+            margin-bottom: 24px;
+        }
+
+        .visual-route h3 {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .visual-route img {
+            width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        /* Route data cards */
+        .route-data {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: var(--light-green-bg);
+            border-radius: 12px;
+            padding: 20px 24px;
+            flex: 1 1 180px;
+            min-width: 180px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .card .icon-circle {
+            width: 32px;
+            height: 32px;
+            background-color: #dff3e6;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .card .card-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card .card-content .label {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .card .card-content .value {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #111827;
+        }
+
+        .card .card-content .desc {
+            font-weight: 400;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* History table */
+        .history-section h3 {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        table.history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table.history-table thead {
+            display: none;
+        }
+
+        table.history-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table.history-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        table.history-table tbody tr td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            color: #111827;
+        }
+
+        table.history-table tbody tr td:not(:first-child) {
+            white-space: nowrap;
+        }
+
+        table.history-table tbody tr td:first-child {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #111827;
+        }
+
+        table.history-table tbody tr td:first-child img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .app {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                padding: 12px 16px;
+                overflow-x: auto;
+                gap: 24px;
+            }
+
+            .sidebar nav {
+                display: flex;
+                gap: 24px;
+                flex-grow: 1;
+            }
+
+            .sidebar ul {
+                display: flex;
+                gap: 16px;
+                margin: 0;
+            }
+
+            .sidebar ul li {
+                margin-bottom: 0;
+            }
+
+            .sidebar .admin-info {
+                display: none;
+            }
+
+            main {
+                padding: 16px 16px 32px 16px;
+            }
+
+            .filter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                flex: 1 1 auto;
+                min-width: auto;
+            }
+
+            button.search-btn {
+                width: 100%;
+                padding: 12px 0;
+                border-radius: 12px;
+            }
+
+            .route-data {
+                flex-direction: column;
+            }
+
+            table.history-table tbody tr td {
+                padding: 10px 6px;
+                font-size: 13px;
+            }
+
+            table.history-table tbody tr td:not(:first-child) {
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app" role="main">
+        <aside aria-label="Menú de navegación" class="sidebar">
+            <nav aria-labelledby="menu-escolar">
+                <h3 id="menu-escolar">
+                    <a href="dash-padre.html" style="text-decoration: none; color: #000;">Tracing</a>
+                </h3>
+                <ul>
+                    <li>
+                        <a href="gestion-vehiculos.html">
+                            Vehículos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="historial-rutas.html" class="active">
+                            Historial de Rutas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ruta-diaria.html">
+                            Ruta de Hoy
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div aria-label="Información del administrador" class="admin-info">
+                <img alt="Foto de perfil del administrador" height="28"
+                    src="https://storage.googleapis.com/a1aa/image/00337444-7f59-46bb-b6dc-9b8b7ce48842.jpg"
+                    width="28" />
+                <div class="admin-text">
+                    <strong>
+                        Administrador
+                    </strong>
+                    <span>
+                        admin@colegio.com
+                    </span>
+                </div>
+            </div>
+        </aside>
+        <main>
+            <nav aria-label="Breadcrumb" class="breadcrumb">
+                <a aria-current="page" href="#">
+                    Inicio
+                </a>
+                <i aria-hidden="true" class="fas fa-chevron-right" style="font-size: 10px; color:#6b7280;">
+                </i>
+                <span>
+                    Historial
+                </span>
+            </nav>
+            <h2>
+                Filtrar historial
+            </h2>
+            <form aria-label="Filtrar historial de recorridos" class="filter-form" role="search">
+                <div class="filter-group">
+                    <label for="fecha">
+                        Fecha
+                    </label>
+                    <input aria-label="Selecciona fecha" id="fecha" name="fecha" placeholder="Selecciona fecha"
+                        type="date" />
+                </div>
+                <div class="filter-group">
+                    <label for="vehiculo">
+                        Vehículo
+                    </label>
+                    <input aria-label="Placa o nombre del vehículo" id="vehiculo" name="vehiculo"
+                        placeholder="Placa o nombre" type="text" />
+                </div>
+                <div class="filter-group">
+                    <label for="conductor">
+                        Conductor
+                    </label>
+                    <input aria-label="Nombre del conductor" id="conductor" name="conductor" placeholder="Nombre"
+                        type="text" />
+                </div>
+                <button aria-label="Buscar" class="search-btn" type="submit">
+                    Buscar
+                </button>
+            </form>
+            <div aria-label="Opciones de filtrado" class="tabs" role="tablist">
+                <button aria-controls="panel-recorrido" aria-selected="true" class="tab active" id="tab-recorrido"
+                    role="tab" tabindex="0">
+                    Recorrido
+                </button>
+                <button aria-controls="panel-datos" aria-selected="false" class="tab" disabled="" id="tab-datos"
+                    role="tab" tabindex="-1">
+                    Datos
+                </button>
+            </div>
+            <section aria-labelledby="tab-recorrido" class="visual-route" id="panel-recorrido" role="tabpanel">
+                <h3>
+                    Recorrido visual
+                </h3>
+                <div style="width: 100%">
+                    <iframe width="100%" height="600" frameborder="0" scrolling="no"
+                        marginheight="0" marginwidth="0"
+                        src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=es&amp;q=El%20Alto,%20La%20Paz,%20Bolivia+(Mi%20nombre%20de%20egocios)&amp;t=p&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a
+                            href="https://www.gps.ie/car-satnav-gps/">Car GPS</a>
+                    <iframe>
+                </div>
+            </section>
+            <section aria-label="Datos del recorrido" class="route-data">
+                <h3 class="sr-only">
+                    Datos del recorrido
+                </h3>
+                <article aria-label="Duración del recorrido" class="card">
+                    <div aria-hidden="true" class="icon-circle">
+                    </div>
+                    <div class="card-content">
+                        <span class="label">
+                            Duración
+                        </span>
+                        <span class="value">
+                            1h 15m
+                        </span>
+                        <span class="desc">
+                            Tiempo total del recorrido
+                        </span>
+                    </div>
+                </article>
+                <article aria-label="Número de paradas" class="card">
+                    <div aria-hidden="true" class="icon-circle">
+                    </div>
+                    <div class="card-content">
+                        <span class="label">
+                            Paradas
+                        </span>
+                        <span class="value">
+                            5
+                        </span>
+                        <span class="desc">
+                            Total de paradas realizadas
+                        </span>
+                    </div>
+                </article>
+                <article aria-label="Velocidad promedio" class="card">
+                    <div aria-hidden="true" class="icon-circle">
+                    </div>
+                    <div class="card-content">
+                        <span class="label">
+                            Velocidad prom.
+                        </span>
+                        <span class="value">
+                            32 km/h
+                        </span>
+                        <span class="desc">
+                            Promedio durante el trayecto
+                        </span>
+                    </div>
+                </article>
+            </section>
+            <section aria-label="Historial de recorridos" class="history-section">
+                <h3>
+                    Historial de recorridos
+                </h3>
+                <table aria-describedby="desc-historial" class="history-table" role="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img alt="Icono de mapa antiguo con tonos beige y verde" height="32"
+                                    src="https://storage.googleapis.com/a1aa/image/358262e0-582d-4a42-21be-e7b729a75952.jpg"
+                                    width="32" />
+                                12/06/2024
+                            </td>
+                            <td>
+                                Vehículo 23
+                            </td>
+                            <td>
+                                Juan Pérez
+                            </td>
+                            <td>
+                                1h 15m
+                            </td>
+                            <td>
+                                5 paradas
+                            </td>
+                            <td>
+                                32 km/h
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img alt="Icono de mapa antiguo con tonos grises y marrones" height="32"
+                                    src="https://storage.googleapis.com/a1aa/image/6687373d-13ec-4a3e-f3b8-3f32830ea017.jpg"
+                                    width="32" />
+                                11/06/2024
+                            </td>
+                            <td>
+                                Vehículo 23
+                            </td>
+                            <td>
+                                Juan Pérez
+                            </td>
+                            <td>
+                                1h 10m
+                            </td>
+                            <td>
+                                4 paradas
+                            </td>
+                            <td>
+                                30 km/h
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
